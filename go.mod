@@ -1,4 +1,4 @@
-module demyanov.dev/urlcrawler
+module github.com/demyanovs/urlcrawler
 
 go 1.22.4
 
