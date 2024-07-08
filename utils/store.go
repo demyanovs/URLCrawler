@@ -10,8 +10,8 @@ var ErrorNoSuchKey = errors.New("no such key")
 
 // Store represents a store for data of any type.
 type Store struct {
-	sync.RWMutex
-	m map[string]any
+	mu sync.RWMutex
+	m  map[string]any
 }
 
 // NewStore creates a new store.
@@ -23,8 +23,8 @@ func NewStore() *Store {
 
 // Get returns the value for the given key.
 func (s *Store) Get(key string) (any, error) {
-	s.RWMutex.RLock()
-	defer s.RWMutex.RUnlock()
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 
 	val, ok := s.m[key]
 
@@ -37,32 +37,32 @@ func (s *Store) Get(key string) (any, error) {
 
 // Add adds a new key-value pair to the store.
 func (s *Store) Add(key string, value any) {
-	s.Lock()
-	defer s.Unlock()
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
 	s.m[key] = value
 }
 
 // Delete deletes the key-value pair from the store.
 func (s *Store) Delete(key string) {
-	s.Lock()
-	defer s.Unlock()
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
 	delete(s.m, key)
 }
 
 // List returns all the values in the store.
 func (s *Store) List() map[string]any {
-	s.RWMutex.RLock()
-	defer s.RWMutex.RUnlock()
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 
 	return s.m
 }
 
 // Keys returns all the keys in the store.
 func (s *Store) Keys() []string {
-	s.RWMutex.RLock()
-	defer s.RWMutex.RUnlock()
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 
 	keys := make([]string, len(s.m))
 
@@ -77,8 +77,8 @@ func (s *Store) Keys() []string {
 
 // Values returns all the values in the store.
 func (s *Store) Values() []any {
-	s.RWMutex.RLock()
-	defer s.RWMutex.RUnlock()
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 
 	data := make([]any, len(s.m))
 
@@ -93,8 +93,8 @@ func (s *Store) Values() []any {
 
 // Clear removes all the key-value pairs from the store.
 func (s *Store) Clear() {
-	s.Lock()
-	defer s.Unlock()
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
 	clear(s.m)
 }
