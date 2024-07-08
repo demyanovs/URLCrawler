@@ -8,9 +8,10 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/demyanovs/robotstxt"
+	_ "golang.org/x/lint"
 
-	"demyanov.dev/urlcrawler/utils"
+	"github.com/demyanovs/robotstxt"
+	"github.com/demyanovs/urlcrawler/utils"
 )
 
 const (

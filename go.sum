@@ -1,9 +1,5 @@
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/demyanovs/robotstxt v1.0.0 h1:1dheWja+qfdrte/jCRWEnd/gr8bBOWNXSvNzO8NRs6k=
-github.com/demyanovs/robotstxt v1.0.0/go.mod h1:LxsRZM8OEa4bnoZwfMWw8q++oMV22bUMqSmtawAK/0A=
-github.com/demyanovs/robotstxt v1.0.1 h1:AU2ax12j+SNIQBRy6v6ukom3Mj8j9hcpvWNFChj+Y5U=
-github.com/demyanovs/robotstxt v1.0.1/go.mod h1:LxsRZM8OEa4bnoZwfMWw8q++oMV22bUMqSmtawAK/0A=
 github.com/demyanovs/robotstxt v1.0.2 h1:Mpwsk08S4tQ9Q53MTHhrFju00Uwd0UglD4sSMXeJpE4=
 github.com/demyanovs/robotstxt v1.0.2/go.mod h1:LxsRZM8OEa4bnoZwfMWw8q++oMV22bUMqSmtawAK/0A=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
@@ -24,6 +20,7 @@ golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/tools v0.0.0-20200130002326-2f3ba24bd6e7 h1:EBZoQjiKKPaLbPrbpssUfuHtwM6KV/vb4U85g/cigFY=
 golang.org/x/tools v0.0.0-20200130002326-2f3ba24bd6e7/go.mod h1:TB2adYChydJhpapKDTa4BR/hXlZSLoq2Wpct/0txZ28=
 golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
