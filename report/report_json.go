@@ -1,7 +1,8 @@
-package utils
+package report
 
 import (
 	"encoding/json"
+	"github.com/demyanovs/urlcrawler/parser"
 	"os"
 )
 
@@ -20,7 +21,7 @@ func NewJSONReport(filePath string) *JSONReport {
 }
 
 // SaveBulk saves multiple records to the file.
-func (r *JSONReport) SaveBulk(records []PageData) error {
+func (r *JSONReport) SaveBulk(records []parser.PageData) error {
 	file, err := os.OpenFile(r.filePath, os.O_CREATE|os.O_RDWR, 0644)
 	defer file.Close()
 
@@ -40,7 +41,7 @@ func (r *JSONReport) SaveBulk(records []PageData) error {
 
 	decoder := json.NewDecoder(file)
 
-	var data []PageData
+	var data []parser.PageData
 	for decoder.More() {
 		err = decoder.Decode(&data)
 		if err != nil {

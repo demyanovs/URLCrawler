@@ -8,10 +8,11 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/demyanovs/robotstxt"
 	_ "golang.org/x/lint"
 
-	"github.com/demyanovs/robotstxt"
-	"github.com/demyanovs/urlcrawler/utils"
+	"github.com/demyanovs/urlcrawler/queue"
+	"github.com/demyanovs/urlcrawler/report"
 )
 
 const (
@@ -28,13 +29,13 @@ var supportedOutputs = []string{outputCSV, outputJSON}
 func main() {
 	startURL := flag.String("u", "", "Start url (required)")
 	output := flag.String("output", outputCSV, "Output format (csv, json)")
-	outputFile := flag.String("output-file", "", "File path to save report")
+	outputFile := flag.String("output-file", "", "File path to save r")
 	delay := flag.Int("delay", 1000, "Delay between requests in milliseconds")
 	depth := flag.Int("depth", 0, "Depth of the crawl (0 - infinite")
 	limitURLs := flag.Int("limit", 0, "Limit of URLs to crawl (0 - unlimited")
 	reqTimeout := flag.Int("timeout", 5000, "Request timeout in milliseconds")
 	bulkSize := flag.Int("bulk-size", 30, "Bulk size for saving to the file")
-	queueLen := flag.Int("queue-len", 50, "Queue length")
+	queueLen := flag.Int("q-len", 50, "Queue length")
 	quietMode := flag.Bool("q", false, "Quiet mode (no logs")
 	ignoreRobotsTXT := flag.Bool("ignore-robots", false, "Ignore crawl-delay and disallowed URLs from robots.txt")
 
@@ -50,10 +51,10 @@ func main() {
 
 	logger := log.New(log.Writer(), "", log.Ldate|log.Ltime)
 
-	report, reportFile := getReport(*output, *outputFile)
+	r, reportFile := getReport(*output, *outputFile)
 
-	queue, err := utils.NewQueue(
-		utils.ConfigType{
+	q, err := queue.New(
+		queue.ConfigType{
 			QueueLen:   *queueLen,
 			LimitURLs:  *limitURLs,
 			ReqTimeout: time.Duration(*reqTimeout) * time.Millisecond,
@@ -63,7 +64,7 @@ func main() {
 			Depth:      *depth,
 		},
 		*startURL,
-		report,
+		r,
 		logger,
 		nil,
 	)
@@ -81,7 +82,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		queue.RobotsData = robots
+		q.RobotsData = robots
 
 		crawlDelay, err := robots.GetCrawlDelay("*")
 		if err != nil {
@@ -89,7 +90,7 @@ func main() {
 		}
 
 		if crawlDelay != nil {
-			queue.Config.Delay = time.Duration(*crawlDelay) * time.Second
+			q.Config.Delay = time.Duration(*crawlDelay) * time.Second
 			if *quietMode == false {
 				logger.Printf("found crawl-delay in robots.txt: %ds. Ignoring delay from the config\n", *crawlDelay)
 			}
@@ -101,10 +102,10 @@ func main() {
 	}
 
 	if *quietMode == false {
-		printConfig(queue, *output, reportFile, *ignoreRobotsTXT, logger)
+		printConfig(q, *output, reportFile, *ignoreRobotsTXT, logger)
 	}
 
-	queue.Start()
+	q.Start()
 }
 
 func getRobotsTXT(startURL string) (*robotstxt.RobotsData, error) {
@@ -128,24 +129,24 @@ func getRobotsTXT(startURL string) (*robotstxt.RobotsData, error) {
 	return robots, nil
 }
 
-func getReport(output string, outputFile string) (utils.Reporter, string) {
-	var report utils.Reporter
+func getReport(output string, outputFile string) (queue.Reporter, string) {
+	var r queue.Reporter
 	if output == outputJSON {
 		if outputFile == "" {
 			outputFile = fmt.Sprintf("%s.%s", fileNameDefault, outputJSON)
 		}
-		report = utils.NewJSONReport(outputFile)
+		r = report.NewJSONReport(outputFile)
 	} else {
 		if outputFile == "" {
 			outputFile = fmt.Sprintf("%s.%s", fileNameDefault, outputCSV)
 		}
-		report = utils.NewCSVReport(outputFile)
+		r = report.NewCSVReport(outputFile)
 	}
 
-	return report, outputFile
+	return r, outputFile
 }
 
-func printConfig(queue *utils.Queue, output string, outputFile string, ignoreRobotsTXT bool, logger *log.Logger) {
+func printConfig(queue *queue.Queue, output string, outputFile string, ignoreRobotsTXT bool, logger *log.Logger) {
 	logger.Printf(
 		"Starting crawling, "+
 			"delay: %dms, "+

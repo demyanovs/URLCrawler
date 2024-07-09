@@ -1,8 +1,10 @@
-package utils
+package queue
 
 import (
 	"context"
 	"fmt"
+	"github.com/demyanovs/urlcrawler/parser"
+	"github.com/demyanovs/urlcrawler/store"
 	"log"
 	"net/http"
 	"net/url"
@@ -16,7 +18,7 @@ type Queue struct {
 	startURL        *url.URL
 	report          Reporter
 	RobotsData      RobotsData
-	parser          Parser
+	parser          parser.Parser
 	logger          Logger
 	startedAt       time.Time
 	sURLsDone       URLStore
@@ -56,7 +58,7 @@ type RobotsData interface {
 
 // Reporter represents a reporter.
 type Reporter interface {
-	SaveBulk(records []PageData) error
+	SaveBulk(records []parser.PageData) error
 }
 
 // Logger represents a logger.
@@ -64,8 +66,8 @@ type Logger interface {
 	Println(v ...any)
 }
 
-// NewQueue creates a new queue.
-func NewQueue(
+// New creates a new queue.
+func New(
 	config ConfigType,
 	startURL string,
 	report Reporter,
@@ -77,7 +79,7 @@ func NewQueue(
 		return nil, err
 	}
 
-	sURLsToDo := NewStore()
+	sURLsToDo := store.New()
 	sURLsToDo.Add(startURL, 0)
 
 	return &Queue{
@@ -85,12 +87,12 @@ func NewQueue(
 		startURL:        parsedURL,
 		report:          report,
 		RobotsData:      robotsData,
-		parser:          NewParser(),
+		parser:          parser.New(),
 		logger:          logger,
-		sURLsDone:       NewStore(),
+		sURLsDone:       store.New(),
 		sURLsToDo:       sURLsToDo,
-		sURLsInProgress: NewStore(),
-		sURLsToSave:     NewStore(),
+		sURLsInProgress: store.New(),
+		sURLsToSave:     store.New(),
 	}, nil
 }
 
@@ -157,13 +159,13 @@ func (q *Queue) process(queue chan struct{}, wg *sync.WaitGroup, URL string, dep
 		ctx, cancel := context.WithTimeout(context.Background(), q.Config.ReqTimeout)
 		defer cancel()
 
-		var pageData PageData
+		var pageData parser.PageData
 		var linksOnPage []string
 
 		// Start processing
 		resp, err := q.readURL(ctx, URL)
 		if err != nil {
-			pageData = PageData{
+			pageData = parser.PageData{
 				URL: URL,
 			}
 			fmt.Println(fmt.Errorf("can't send request to url %s. Error: %s", URL, err))
@@ -197,12 +199,12 @@ func (q *Queue) process(queue chan struct{}, wg *sync.WaitGroup, URL string, dep
 	}()
 }
 
-func (q *Queue) toPagesData(data []any) PagesData {
-	var pagesData PagesData
+func (q *Queue) toPagesData(data []any) parser.PagesData {
+	var pagesData parser.PagesData
 	for _, d := range data {
 		switch d.(type) {
-		case PageData:
-			pagesData = append(pagesData, d.(PageData))
+		case parser.PageData:
+			pagesData = append(pagesData, d.(parser.PageData))
 		}
 	}
 

@@ -1,4 +1,4 @@
-package utils
+package parser
 
 import (
 	"io"
@@ -26,7 +26,7 @@ func TestParseURL_WrongStatusCodeError(t *testing.T) {
 		},
 	}
 
-	parser := NewParser()
+	parser := New()
 	_, _, err := parser.ParseResponse(&resp)
 
 	require.Error(t, err)
@@ -45,7 +45,7 @@ func TestParseURL_Success(t *testing.T) {
 		},
 	}
 
-	parser := NewParser()
+	parser := New()
 	pageData, linksOnPage, err := parser.ParseResponse(&resp)
 
 	require.NoError(t, err)

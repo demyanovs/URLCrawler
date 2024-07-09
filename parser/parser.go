@@ -1,4 +1,4 @@
-package utils
+package parser
 
 import (
 	"fmt"
@@ -32,8 +32,8 @@ type Parser struct {
 	Client http.Client
 }
 
-// NewParser creates a new Parser.
-func NewParser() Parser {
+// New creates a new Parser.
+func New() Parser {
 	return Parser{
 		//Client: client,
 	}

@@ -1,4 +1,4 @@
-package utils
+package store
 
 import (
 	"errors"
@@ -14,8 +14,8 @@ type Store struct {
 	m  map[string]any
 }
 
-// NewStore creates a new store.
-func NewStore() *Store {
+// New creates a new store.
+func New() *Store {
 	return &Store{
 		m: make(map[string]any),
 	}

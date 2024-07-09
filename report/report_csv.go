@@ -1,7 +1,8 @@
-package utils
+package report
 
 import (
 	"encoding/csv"
+	"github.com/demyanovs/urlcrawler/parser"
 	"log"
 	"os"
 	"strconv"
@@ -24,7 +25,7 @@ func NewCSVReport(filePath string) *CSVReport {
 }
 
 // SaveBulk saves multiple records to the file.
-func (r *CSVReport) SaveBulk(records []PageData) error {
+func (r *CSVReport) SaveBulk(records []parser.PageData) error {
 	if r.firstInsert == true {
 		err := r.addHeader()
 		if err != nil {

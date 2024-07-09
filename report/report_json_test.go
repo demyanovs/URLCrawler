@@ -1,7 +1,9 @@
-package utils
+package report
 
 import (
-	"encoding/csv"
+	"encoding/json"
+	"github.com/demyanovs/urlcrawler/parser"
+	"io"
 	"log"
 	"os"
 	"testing"
@@ -9,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var records = PagesData{
+var data = parser.PagesData{
 	{
 		URL:        "https://en.wikipedia.org/wiki/Yuri_Gagarin",
 		StatusCode: 200,
@@ -33,9 +35,9 @@ var records = PagesData{
 	},
 }
 
-func TestSaveBulkCSV_WithHeaderSuccess(t *testing.T) {
-	filePath := "result_test.scv"
-	reporter := NewCSVReport(filePath)
+func TestSaveBulkJSON_WithHeaderSuccess(t *testing.T) {
+	filePath := "result_test.json"
+	reporter := NewJSONReport(filePath)
 	reporter.firstInsert = true
 
 	err := reporter.SaveBulk(records)
@@ -43,43 +45,22 @@ func TestSaveBulkCSV_WithHeaderSuccess(t *testing.T) {
 
 	defer os.Remove(filePath)
 
+	var parsedData parser.PagesData
 	f, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
-	csvReader := csv.NewReader(f)
-	rows, err := csvReader.ReadAll()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	require.Equal(t, 4, len(rows))
-
-}
-
-func TestSaveBulkCSV_WithoutHeaderSuccess(t *testing.T) {
-	filePath := "result_test.scv"
-	reporter := NewCSVReport(filePath)
-	reporter.firstInsert = false
-
-	err := reporter.SaveBulk(records)
-	require.NoError(t, err)
-
-	defer os.Remove(filePath)
-
-	f, err := os.Open(filePath)
-	if err != nil {
-		log.Println("Unable to read input file "+filePath, err)
-	}
-	defer f.Close()
-
-	csvReader := csv.NewReader(f)
-	rows, err := csvReader.ReadAll()
 	if err != nil {
 		log.Println(err)
 	}
 
-	require.Equal(t, 3, len(rows))
+	defer f.Close()
+
+	jsonData, err := io.ReadAll(f)
+	if err != nil {
+		log.Println(err)
+	}
+	err = json.Unmarshal(jsonData, &parsedData)
+	if err != nil {
+		log.Println(err)
+	}
+	require.Equal(t, data, parsedData)
+
 }

@@ -1,7 +1,8 @@
-package utils
+package store
 
 import (
 	"fmt"
+	"github.com/demyanovs/urlcrawler/parser"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -11,7 +12,7 @@ var storeData = map[string]any{
 	"key1": 1,
 	"key2": 2,
 	"key3": 3,
-	"key4": PageData{
+	"key4": parser.PageData{
 		URL:        "path1",
 		StatusCode: 200,
 		Title:      "title1",
@@ -21,7 +22,7 @@ var storeData = map[string]any{
 }
 
 func TestGet_NoSuchKeyError(t *testing.T) {
-	store := NewStore()
+	store := New()
 	_, err := store.Get("")
 	require.ErrorIs(t, ErrorNoSuchKey, err)
 }
@@ -53,7 +54,7 @@ func TestDelete_Success(t *testing.T) {
 }
 
 func TestList_EmptyStoreSuccess(t *testing.T) {
-	store := NewStore()
+	store := New()
 	list := store.List()
 	require.Empty(t, list)
 }
@@ -65,7 +66,7 @@ func TestList_Success(t *testing.T) {
 }
 
 func TestKeys_EmptyStoreSuccess(t *testing.T) {
-	store := NewStore()
+	store := New()
 	list := store.Keys()
 	require.Empty(t, list)
 }
@@ -79,7 +80,7 @@ func TestKeys_Success(t *testing.T) {
 func TestValues_Success(t *testing.T) {
 	store := createAndFillStore()
 	list := store.Values()
-	require.ElementsMatch(t, []any{1, 2, 3, PageData{
+	require.ElementsMatch(t, []any{1, 2, 3, parser.PageData{
 		URL:        "path1",
 		StatusCode: 200,
 		Title:      "title1",
@@ -108,7 +109,7 @@ func TestLen_Success(t *testing.T) {
 }
 
 func createAndFillStore() *Store {
-	store := NewStore()
+	store := New()
 
 	for k, v := range storeData {
 		store.Add(k, v)
