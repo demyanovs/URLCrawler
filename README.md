@@ -1,3 +1,5 @@
+[![Go Reference](https://pkg.go.dev/badge/github.com/demyanovs/urlcrawler.svg)](https://pkg.go.dev/github.com/demyanovs/urlcrawler)
+
 # URLCrawler
 
 A robust and efficient web crawler written in Go (Golang). 
