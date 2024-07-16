@@ -60,13 +60,13 @@ The following are the primary command-line options available for the web crawler
 - `-depth`: Sets the maximum depth of crawling relative to the starting URL. Default is `0` (infinite).
 - `-delay`: Determines the delay between requests in milliseconds to manage load on the server. Default is `1000`.
 - `-output`: Specifies the output format for the crawl results. Supported formats are `csv` and `json`. Default is `csv`.
-- `output-file`: Specifies the file path to save the crawl results. Default is `results.csv`.
-- `limit`: Specifies the maximum number of pages to crawl. Default is `0` (unlimited).
-- `timeout`: Specifies the maximum time in milliseconds to wait for a response. Default is `5000`.
-- `bulk-size`: Specifies the number of pages to save in each bulk write operation. Default is `30`.
-- `q`: quiet mode, suppresses all output except for errors. Default is `false`.
-- `ignore-robots`: Ignore robots.txt rules. Default is `false`.
-- `queue-len`: Specifies the number of parallel workers to use. Default is `50`.
+- `-output-file`: Specifies the file path to save the crawl results. Default is `results.csv`.
+- `-limit`: Specifies the maximum number of pages to crawl. Default is `0` (unlimited).
+- `-timeout`: Specifies the maximum time in milliseconds to wait for a response. Default is `5000`.
+- `-bulk-size`: Specifies the number of pages to save in each bulk write operation. Default is `30`.
+- `-q`: quiet mode, suppresses all output except for errors. Default is `false`.
+- `-ignore-robots`: Ignore robots.txt rules. Default is `false`.
+- `-queue-len`: Specifies the number of parallel workers to use. Default is `50`.
 
 ### Basic Usage
 

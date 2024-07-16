@@ -3,7 +3,7 @@ module github.com/demyanovs/urlcrawler
 go 1.22.4
 
 require (
-	github.com/demyanovs/robotstxt v1.0.2
+	github.com/demyanovs/robotstxt v1.1.0
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
 )

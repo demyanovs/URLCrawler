@@ -53,7 +53,7 @@ type URLStore interface {
 // RobotsData represents a robots.txt file.
 type RobotsData interface {
 	IsAllowed(userAgent string, URL string) bool
-	GetCrawlDelay(userAgent string) (*int, error)
+	CrawlDelay(userAgent string) (*int, error)
 }
 
 // Reporter represents a reporter.

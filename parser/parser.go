@@ -59,10 +59,10 @@ func (p *Parser) ParseResponse(resp *http.Response) (PageData, []string, error) 
 
 	contentString := string(content)
 
-	links := p.getLinks(contentString)
-	title := p.getTitle(contentString)
-	desc := p.getDescription(contentString)
-	keywords := p.getKeywords(contentString)
+	links := p.links(contentString)
+	title := p.title(contentString)
+	desc := p.description(contentString)
+	keywords := p.keywords(contentString)
 
 	return PageData{
 		URL:        resp.Request.URL.String(),
@@ -73,7 +73,7 @@ func (p *Parser) ParseResponse(resp *http.Response) (PageData, []string, error) 
 	}, p.unique(links), nil
 }
 
-func (p *Parser) getLinks(content string) []string {
+func (p *Parser) links(content string) []string {
 	matches := regExLinks.FindAllStringSubmatch(content, -1)
 	if len(matches) == 0 {
 		return nil
@@ -87,7 +87,7 @@ func (p *Parser) getLinks(content string) []string {
 	return links
 }
 
-func (p *Parser) getTitle(content string) string {
+func (p *Parser) title(content string) string {
 	matches := regExTitle.FindStringSubmatch(content)
 	if len(matches) == 0 {
 		return ""
@@ -96,7 +96,7 @@ func (p *Parser) getTitle(content string) string {
 	return strings.TrimSpace(matches[1])
 }
 
-func (p *Parser) getDescription(content string) string {
+func (p *Parser) description(content string) string {
 	matches := regExDesc.FindStringSubmatch(content)
 	if len(matches) == 0 {
 		return ""
@@ -105,7 +105,7 @@ func (p *Parser) getDescription(content string) string {
 	return strings.TrimSpace(matches[1])
 }
 
-func (p *Parser) getKeywords(content string) string {
+func (p *Parser) keywords(content string) string {
 	matches := regExKeywords.FindStringSubmatch(content)
 	if len(matches) == 0 {
 		return ""

@@ -51,7 +51,7 @@ func main() {
 
 	logger := log.New(log.Writer(), "", log.Ldate|log.Ltime)
 
-	r, reportFile := getReport(*output, *outputFile)
+	r, reportFile := reportByOutput(*output, *outputFile)
 
 	q, err := queue.New(
 		queue.ConfigType{
@@ -77,14 +77,14 @@ func main() {
 		if *quietMode == false {
 			log.Println("parsing robots.txt")
 		}
-		robots, err := getRobotsTXT(*startURL)
+		robots, err := robotsTXTFromURL(*startURL)
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		q.RobotsData = robots
 
-		crawlDelay, err := robots.GetCrawlDelay("*")
+		crawlDelay, err := robots.CrawlDelay("*")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -108,7 +108,7 @@ func main() {
 	q.Start()
 }
 
-func getRobotsTXT(startURL string) (*robotstxt.RobotsData, error) {
+func robotsTXTFromURL(startURL string) (*robotstxt.RobotsData, error) {
 	parsedURL, err := url.Parse(startURL)
 	if err != nil || parsedURL == nil {
 		return nil, err
@@ -129,7 +129,7 @@ func getRobotsTXT(startURL string) (*robotstxt.RobotsData, error) {
 	return robots, nil
 }
 
-func getReport(output string, outputFile string) (queue.Reporter, string) {
+func reportByOutput(output string, outputFile string) (queue.Reporter, string) {
 	var r queue.Reporter
 	if output == outputJSON {
 		if outputFile == "" {
