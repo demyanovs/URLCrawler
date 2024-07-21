@@ -1,4 +1,4 @@
-[![Go Reference](https://pkg.go.dev/badge/github.com/demyanovs/urlcrawler.svg)](https://pkg.go.dev/github.com/demyanovs/urlcrawler)
+[![](https://github.com/demyanovs/urlcrawler/actions/workflows/go.yml/badge.svg)](https://github.com/demyanovs/urlcrawler/actions) [![Go Reference](https://pkg.go.dev/badge/github.com/demyanovs/urlcrawler.svg)](https://pkg.go.dev/github.com/demyanovs/urlcrawler)
 
 # URLCrawler
 
