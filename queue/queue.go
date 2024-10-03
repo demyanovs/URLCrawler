@@ -154,7 +154,7 @@ func (q *Queue) process(queue chan struct{}, wg *sync.WaitGroup, URL string, dep
 		q.sURLsToDo.Delete(URL)
 		q.sURLsInProgress.Add(URL, depth)
 
-		q.log(fmt.Sprintf("processing: %s, (found: %d)", URL, q.sURLsToDo.Len()))
+		q.log(fmt.Sprintf("processing: %s (found: %d)", URL, q.sURLsToDo.Len()))
 
 		ctx, cancel := context.WithTimeout(context.Background(), q.Config.ReqTimeout)
 		defer cancel()
